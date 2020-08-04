@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  discovery:
+    image: micro-eureka
+    ports:
+      - 9102:9102
+
+  zuul:
+    image: micro-zuul
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:9102/
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    ports:
+      - 9004:9004
+
+  micro-gpsutil:
+    image: micro-gpsutil
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:9102/
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    ports:
+      - 9001:9001
+
+  micro-reward:
+    image: micro-reward
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:9102/
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    ports:
+      - 9003:9003
+
+  micro-user:
+    image: micro-user
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discovery:9102/
+    links:
+      - discovery
+    depends_on:
+      - discovery
+    ports:
+      - 9002:9002
+
